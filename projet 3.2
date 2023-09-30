@@ -1,0 +1,17 @@
+clear all;
+close all;
+clc
+
+
+[x1,Fe1]=audioread("x1.wav");
+[x2,Fe2]=audioread("x2.wav");
+
+r1=x1'*x2;
+r2=x2'*x2;
+
+rho=r1/r2;
+
+epsilon=x1-rho*x2;
+
+
+sound(epsilon,Fe1)
