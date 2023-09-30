@@ -1,0 +1,25 @@
+clear all;
+
+%Lecture du fichier
+[Y,FE]=audioread("canal.wav");
+N=length(Y);
+F=fft(Y);
+x=(1:N);
+
+% stockage de la moitié du signal sauf la fréquence 0
+tmp1=F(2:(N/2));
+
+% stockage de la moitié du signal sauf la fréquence Fe/2
+tmp2=F((N/2+2):N);
+%inversement des hautes et basses fréquences
+tmp1b=tmp1(N/2-1:-1:1);
+tmp2b=tmp2(N/2-1:-1:1);
+
+%Recomposition du signal
+F(2:(N/2))=tmp1b;
+F((N/2+2):N)=tmp2b;
+y=ifft(F);
+F1=abs(fft(y));
+plot(x,F1);
+%Lecture du fichier audio
+%sound(y,FE);
