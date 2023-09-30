@@ -1,0 +1,30 @@
+clear all;
+close all;
+clc;
+B=imread('fichier2.bmp','bmp');
+B=255*B;
+image(B);
+%colormap(GRAY);
+
+[H,L]=size(B);
+
+%translation de chaque ligne de pixel
+ for j = 1:H-1
+    
+    x1=B(j,:);
+    x2=B(j+1,:);
+    C=xcorr(x1,x2);
+    [M,i_max] = max(C);  % i_max et l'indice de translation à faire
+    tmp=circshift(x2,i_max); % translation des pixels
+    B(j+1,:)=tmp;
+ end
+i=280;
+ for j = 1:H-1
+    
+    x=B(j,:);
+   
+    tmp=circshift(x,-i);
+    B(j,:)=tmp;
+ end
+ 
+
