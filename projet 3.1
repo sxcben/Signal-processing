@@ -1,0 +1,36 @@
+clear all;
+close all;
+clc
+[y,Fe]=audioread("Pa11.wav");
+u=xcorr(y); 
+
+L=length(u);
+x=(1:L);
+L1=length(y);
+x1=(1:L1);
+
+%affichage de la corrélation
+%plot(x,u);
+
+[c,i_max]=max(u);
+tmp=u(3300:3500);
+[c2,i_max2]=max(tmp);
+
+p0=3419;
+alpha=0.6472;
+
+A1=[1,0];
+B1=zeros(1,p0);
+
+B1(p0)=alpha;
+B1(1)=1;
+
+
+s=filter(A1,B1,y);
+u2=xcorr(s); 
+L2= length(u2);
+x2=(1:L2)
+plot(x2,u2);
+
+sound(s,Fe)
+
