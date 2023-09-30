@@ -1,0 +1,60 @@
+clear all;
+
+%récupération des signaux
+[x1,Fe] = audioread('Mo11.wav');
+X1 = fft(x1);
+L1=length(x1);
+
+
+
+N=floor(L1/2);
+x=[1:N];
+Y=X1(1:N);
+
+%plot(x,Y);
+freq_vect=(0:L1-1)*Fe/L1;
+plot(freq_vect,abs(X1));
+
+%analyse frequentielle:détermination des fréquences réduites des bruits
+[m1,N1]=max(Y);
+f1=(N1-1)*Fe/L1;
+
+tmp=Y;
+tmp(N1)=0;
+[m2,N2]=max(tmp);
+f2=(N2-1)*Fe/L1;
+
+fred1=2*pi*f1/Fe;
+fred2=2*pi*f2/Fe;
+
+%construction du filtre
+
+Z1=exp(i*fred1); %zéros de la fonction de transfert
+Z2=exp(i*fred2);
+rho=0.98;
+P1=rho*Z1;  %pôles de la fonction de transfert
+P2=rho*Z2;
+
+
+A1=[1,-2*real(Z1),1];  %coefficiants de la fonction de filtrage
+B1=[1,-2*real(P1),norm(P1)^2];
+
+A2=[1,-2*real(Z2),1];
+B2=[1,-2*real(P2),norm(P2)^2];
+
+%filtrage du signal
+S1=filter(A1,B1,x1);
+
+%2ème filtrage
+S2=filter(A2,B2,S1);
+M=max(S2);
+S2=S2/norm(M)  %normalisation du signal
+% affichage de l'audio filtré
+fft_s2=fft(S2);
+figure
+plot(freq_vect,abs(fft_s2));
+
+
+
+audiowrite('resultat.wav',S2,Fe) ;
+sound(S2,Fe) ;
