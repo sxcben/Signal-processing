@@ -1,0 +1,41 @@
+clear all;
+close all;
+clc;
+
+%Lecture du fichier
+[y,Fe] = audioread('encode.wav');
+Y=abs(fft(y));
+L=length(y);
+x=(1:L);
+
+%opérations pour récupérer les signaux utiles
+y1=y(1:2:L-1);
+y2=y(2:2:L);
+
+
+
+
+
+
+tmp=zeros(1,L);
+for j=1:L
+    if (mod(j,2)==0)
+        tmp(j)=y1(j/2);
+    else
+        tmp(j)=0;
+    end
+end
+
+x1=(1:L/2);
+ 
+Y2=abs(fft(y2));
+Y1=abs(fft(y1));
+TMP=abs(fft(tmp));
+
+plot(x,Y);
+figure
+plot(x1,Y1);
+
+ 
+audiowrite('resultat23.wav',y2,Fe) ;
+%sound(y2,Fe) ;
